@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Password Generator Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+    <script src="https://martinbroede.github.io/passwords/main.js"></script>
+  </head>
+
+  <style>
+    input[type="text"],
+    input[type="password"],
+    input[type="number"] {
+      width: 100%;
+      max-width: 400px;
+    }
+  </style>
+
+  <body class="w3-grey">
+    <input type="hidden" id="id-block-pw-generator" />
+    <div class="w3-container w3-teal">
+      <h2>Password Generator</h2>
+    </div>
+    <div class="w3-container w3-monospace w3-padding w3-light-grey">
+      <p>
+        <label for="extract">EXTRACT DOMAIN NAME FROM URL:</label>
+        <input type="checkbox" id="extract" name="extract" checked onchange="onChange()" oninput="onChange()" />
+      </p>
+      <p>
+        <label for="url">URL:&nbsp;&nbsp;&nbsp;</label>
+        <input type="text" id="url" name="url" onchange="onChange()" autocomplete="off" oninput="onChange()" />
+      </p>
+      <p>
+        <label for="salt">SALT:&nbsp;&nbsp;</label>
+        <input type="text" id="salt" name="salt" readonly class="w3-text-grey" autocomplete="off" />
+      </p>
+      <p>
+        <label for="length">LENGTH:</label>
+        <input
+          type="number"
+          id="length"
+          name="length"
+          min="4"
+          max="40"
+          value="16"
+          placeholder="4-40"
+          autocomplete="off"
+          onchange="onChange()"
+          oninput="onChange()"
+        />
+      </p>
+      <hr class="w3-border-dark-grey" />
+      <p>
+        <label for="password">PHRASE:</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          autocomplete="off"
+          placeholder="YOUR PASSPHRASE"
+          onchange="onChange()"
+          oninput="onChange()"
+        />
+        <span style="display: inline-block" class="w3-text-dark-grey w3-margin-top"
+          >CLEAR IN <span id="countdown">*</span> SECONDS</span
+        >
+      </p>
+      <hr class="w3-border-dark-grey" />
+      <p>
+        <label for="hash">HASH:&nbsp;&nbsp;</label>
+        <input type="text" id="hash" name="hash" readonly class="w3-text-grey" autocomplete="off" />
+
+        <span style="display: inline-block">
+          <button class="w3-margin-top" type="button" onclick="copyToClipboard()">COPY</button>
+          <button class="w3-margin-top" type="button" onclick="clearAll()">CLEAR</button>
+        </span>
+      </p>
+      <p>
+        <label for="show">SHOW:&nbsp;&nbsp;</label>
+        <input type="checkbox" id="show" name="show" onchange="onChange()" oninput="onChange()" />
+      </p>
+    </div>
+  </body>
+</html>
