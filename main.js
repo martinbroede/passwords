@@ -16,11 +16,12 @@
  * The generated password is basically the SHA-256 hash of the primary password + the domain name.
  * To meet the password requirements of most websites, the hash is modified to contain at least
  * one digit, one lowercase letter, one uppercase letter and one special character.
- * To accomplish this, the hash is encoded the following base-90 alphabet:
+ * To accomplish this, the hash is encoded with the following base-90 alphabet:
  * 0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%"&/\()_+-=[]{};:'|,.<>?
  *
- * The script provides a shortcut to trigger the password prompt (CTRL + ALT + G)
- * and shortcuts to fill in the username in the username input fields (CTRL + ALT + 0-9)
+ * The script provides a shortcut to trigger the password prompt [CTRL + ALT + G] 
+ * and shortcuts to fill in the username in the username input fields [CTRL + ALT + 0-9].
+ * If you want to delete the stored usernames, use [CTRL + ALT + MINUS]
  *
  * KEEP IN MIND THAT, AS IN EVERY PASSWORD MANAGER, THE PRIMARY PASSWORD IS THE KEY TO ALL OTHER PASSWORDS!
  * THEREFORE, IT IS IMPORTANT TO KEEP THE PRIMARY PASSWORD SECURE AND TO NOT SHARE IT WITH ANYONE!
