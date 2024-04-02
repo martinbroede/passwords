@@ -19,7 +19,7 @@
  * To accomplish this, the hash is encoded with the following base-90 alphabet:
  * 0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%"&/\()_+-=[]{};:'|,.<>?
  *
- * The script provides a shortcut to trigger the password prompt [CTRL + ALT + G] 
+ * The script provides a shortcut to trigger the password prompt [CTRL + ALT + G]
  * and shortcuts to fill in the username in the username input fields [CTRL + ALT + 0-9].
  * If you want to delete the stored usernames, use [CTRL + ALT + MINUS]
  *
@@ -429,18 +429,6 @@ function deleteAllValues() {
   createToast("Deleted stored usernames<br/>Reset primary password", COLOR_CODE_RED);
 }
 
-test();
-if (!document.getElementById("id-block-pw-generator") === null) {
-  installShortcuts();
-}
-
-// *********************************************************************************************************************
-// THE CODE BELOW IS ONLY USED IN THE DEMO APPLICATION AND NOT IN THE USER SCRIPT
-// IT DOES NOT AFFECT THE FUNCTIONALITY OF THE USER SCRIPT THOUGH
-// *********************************************************************************************************************
-
-let hasIntervalBeenSet = false;
-
 /**
  * Extracts the domain name from the URL. If the given string
  * is not a valid URL, the input string is returned.
@@ -460,6 +448,18 @@ function extractDomain(url) {
   }
   return url;
 }
+
+test();
+if (!document.getElementById("id-block-pw-generator") === null) {
+  installShortcuts();
+}
+
+// *********************************************************************************************************************
+// THE CODE BELOW IS ONLY USED IN THE DEMO APPLICATION AND NOT IN THE USER SCRIPT
+// IT DOES NOT AFFECT THE FUNCTIONALITY OF THE USER SCRIPT THOUGH
+// *********************************************************************************************************************
+
+let hasIntervalBeenSet = false;
 
 /**
  * Generates a password hash from the input fields and displays it in the hashOutput field.
@@ -507,7 +507,7 @@ function onChange() {
 }
 
 /**
- * Returns the first two and the last two characters of the input string.
+ * Returns the first and last character of the text.
  * The rest is replaced by asterisks.
  * @param {string} text
  */
