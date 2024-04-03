@@ -450,7 +450,7 @@ function extractDomain(url) {
 }
 
 test();
-if (!document.getElementById("id-block-pw-generator") === null) {
+if (!["github.io", "0.1"].includes(extractDomain(window.location.hostname))) {
   installShortcuts();
 }
 
