@@ -10,6 +10,6 @@ meet the password requirements of most websites.
 
 ## Usage
 
-To keep the documentation DRY, I redirect you to the Demo Page which explains everything in detail:
+To keep the documentation DRY, I redirect you to the demo page which explains everything in detail:
 
 [Demo Page](https://martinbroede.github.io/passwords/)
