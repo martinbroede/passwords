@@ -126,9 +126,9 @@ function createToast(message, colorCode = "#eef") {
   overlay.style.display = "flex";
   overlay.style.justifyContent = "center";
   overlay.style.alignItems = "center";
-  overlay.style.zIndex = "5000";
+  overlay.style.zIndex = "100000";
   overlay.style.color = colorCode;
-  overlay.style.fontFamily = "Arial, sans-serif";
+  overlay.style.fontFamily = "sans-serif";
 
   const toast = document.createElement("div");
   toast.innerHTML = message;
@@ -147,28 +147,13 @@ function createToast(message, colorCode = "#eef") {
  * @returns {void}
  */
 function installShortcuts() {
-  const shortcutKey = "Alt";
-  let isAltPressed = false;
-
   document.addEventListener("keydown", function (event) {
-    if (event.altKey && event.key === shortcutKey) {
-      isAltPressed = true;
-    }
-  });
-
-  document.addEventListener("keyup", function (event) {
-    if (event.key === shortcutKey) {
-      isAltPressed = false;
-    }
-
-    if (isAltPressed && event.key === "g") {
+    if (event.altKey && event.ctrlKey && event.key === "g") {
       createPasswordPrompt();
-      isAltPressed = false;
-    } else if (isAltPressed && Number(event.key) >= 0 && Number(event.key) <= 9 && event.key !== " ") {
+    } else if (event.altKey && event.ctrlKey && Number(event.key) >= 0 && Number(event.key) <= 9 && event.key !== " ") {
       addUserName("user_" + event.key);
-    } else if (isAltPressed && event.key === "-") {
+    } else if (event.altKey && event.ctrlKey && event.key === "-") {
       deleteAllValues();
-      isAltPressed = false;
     }
   });
 }
@@ -180,6 +165,7 @@ function installShortcuts() {
  * @returns {void}
  */
 function triggerInputValidation(field) {
+  field.focus();
   const events = ["change", "input", "keydown", "keypress", "keyup"];
   for (let i = 0; i < events.length; i++) {
     const event = new Event(events[i], {
@@ -188,7 +174,6 @@ function triggerInputValidation(field) {
     });
     field.dispatchEvent(event);
   }
-  field.focus();
 }
 
 /**
@@ -293,9 +278,14 @@ async function storePasswordHash(password) {
  * @returns {void}
  */
 function createPasswordPrompt() {
+  if (document.getElementById("id-tampermonkey-password-prompt")) {
+    return;
+  }
+
   /**
    * To be executed when the user submits the password.
-   * Will
+   * Wil generate the password hash and insert it into the input fields
+   * that are of type password.
    * @param {Event} event
    */
   async function onInput(event) {
@@ -323,6 +313,7 @@ function createPasswordPrompt() {
   }
 
   const div = document.createElement("div");
+  div.id = "id-tampermonkey-password-prompt";
   div.style.position = "fixed";
   div.style.top = "0";
   div.style.left = "0";
@@ -332,9 +323,9 @@ function createPasswordPrompt() {
   div.style.display = "flex";
   div.style.justifyContent = "center";
   div.style.alignItems = "center";
-  div.style.zIndex = "4999";
+  div.style.zIndex = "99999";
   div.style.color = "#eef";
-  div.style.fontFamily = "Arial, sans-serif";
+  div.style.fontFamily = "sans-serif";
 
   const label = document.createElement("label");
   label.htmlFor = "password";
