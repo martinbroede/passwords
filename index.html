@@ -3,10 +3,11 @@
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Password Generator Demo</title>
+    <title>Passwords</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="https://martinbroede.github.io/passwords/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-highway.css" />
     <script src="https://martinbroede.github.io/passwords/main.js"></script>
   </head>
 
@@ -17,71 +18,224 @@
       width: 100%;
       max-width: 400px;
     }
+
+    p {
+      text-align: justify;
+    }
+
+    .dark-grey {
+      background-color: #233543;
+      color: #fff;
+    }
+
+    kbd,
+    .code {
+      background-color: #8887 !important;
+      padding: 4px 8px;
+    }
+
+    footer {
+      width: 100%;
+      font-size: xx-small;
+    }
   </style>
 
   <body class="w3-grey">
     <input type="hidden" id="id-block-pw-generator" />
-    <div class="w3-container w3-teal">
-      <h2>Password Generator</h2>
-    </div>
-    <div class="w3-container w3-monospace w3-padding w3-light-grey">
-      <p>
-        <label for="extract">EXTRACT DOMAIN NAME FROM URL:</label>
-        <input type="checkbox" id="extract" name="extract" checked onchange="onChange()" oninput="onChange()" />
-      </p>
-      <p>
-        <label for="url">URL:&nbsp;&nbsp;&nbsp;</label>
-        <input type="text" id="url" name="url" onchange="onChange()" autocomplete="off" oninput="onChange()" />
-      </p>
-      <p>
-        <label for="salt">SALT:&nbsp;&nbsp;</label>
-        <input type="text" id="salt" name="salt" readonly class="w3-text-grey" autocomplete="off" />
-      </p>
-      <p>
-        <label for="length">LENGTH:</label>
-        <input
-          type="number"
-          id="length"
-          name="length"
-          min="4"
-          max="40"
-          value="16"
-          placeholder="4-40"
-          autocomplete="off"
-          onchange="onChange()"
-          oninput="onChange()"
-        />
-      </p>
-      <hr class="w3-border-dark-grey" />
-      <p>
-        <label for="password">PHRASE:</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          autocomplete="off"
-          placeholder="YOUR PASSPHRASE"
-          onchange="onChange()"
-          oninput="onChange()"
-        />
-        <span style="display: inline-block" class="w3-text-dark-grey w3-margin-top"
-          >CLEAR IN <span id="countdown">*</span> SECONDS</span
-        >
-      </p>
-      <hr class="w3-border-dark-grey" />
-      <p>
-        <label for="hash">HASH:&nbsp;&nbsp;</label>
-        <input type="text" id="hash" name="hash" readonly class="w3-text-grey" autocomplete="off" />
 
-        <span style="display: inline-block">
-          <button class="w3-margin-top" type="button" onclick="copyToClipboard()">COPY</button>
-          <button class="w3-margin-top" type="button" onclick="clearAll()">CLEAR</button>
-        </span>
-      </p>
-      <p>
-        <label for="show">SHOW:&nbsp;&nbsp;</label>
-        <input type="checkbox" id="show" name="show" onchange="onChange()" oninput="onChange()" />
-      </p>
+    <div class="main-content">
+      <div class="w3-container w3-highway-blue">
+        <h3>Password Generator</h3>
+      </div>
+
+      <!-- <Password Generation Form -->
+      <div class="w3-container w3-monospace w3-padding w3-light-grey">
+        <p>
+          <label for="extract">EXTRACT DOMAIN NAME FROM URL:</label>
+          <input type="checkbox" id="extract" name="extract" checked onchange="onChange()" oninput="onChange()" />
+        </p>
+        <p>
+          <label for="url">URL:&nbsp;&nbsp;&nbsp;</label>
+          <input
+            type="text"
+            id="url"
+            name="url"
+            onchange="onChange()"
+            autocomplete="off"
+            oninput="onChange()"
+            placeholder="https://auth.example.com/login"
+          />
+        </p>
+        <p>
+          <label for="domain">DOMAIN:</label>
+          <input
+            type="text"
+            id="domain"
+            name="domain"
+            readonly
+            class="w3-text-grey"
+            autocomplete="off"
+            placeholder="example.com"
+          />
+        </p>
+        <p>
+          <label for="length">LENGTH:</label>
+          <input
+            type="number"
+            id="length"
+            name="length"
+            min="4"
+            max="40"
+            value="16"
+            placeholder="4-40"
+            autocomplete="off"
+            onchange="onChange()"
+            oninput="onChange()"
+          />
+        </p>
+        <hr class="w3-border-dark-grey" />
+        <p>
+          <label for="password">PHRASE:</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            autocomplete="off"
+            placeholder="YOUR PRIMARY PASSWORD"
+            onchange="onChange()"
+            oninput="onChange()"
+          />
+          <span style="display: inline-block" class="w3-text-dark-grey w3-margin-top"
+            >CLEAR IN <span id="countdown">*</span> SECONDS</span
+          >
+        </p>
+        <hr class="w3-border-dark-grey" />
+        <p>
+          <label for="hash">HASH:&nbsp;&nbsp;</label>
+          <input type="text" id="hash" name="hash" readonly class="w3-text-grey" autocomplete="off" />
+
+          <span style="display: inline-block">
+            <button class="w3-margin-top" type="button" onclick="copyToClipboard()">COPY</button>
+            <button class="w3-margin-top" type="button" onclick="clearAll()">CLEAR</button>
+          </span>
+        </p>
+        <p>
+          <label for="show">SHOW:&nbsp;&nbsp;</label>
+          <input type="checkbox" id="show" name="show" onchange="onChange()" oninput="onChange()" />
+        </p>
+      </div>
+      <!-- </Password Generation Form -->
+
+      <!-- < Explanation /> -->
+      <div class="w3-container w3-highway-blue">
+        <h4>What is this?</h4>
+        <p>
+          This is a demo app for generating secure passwords based on a passphrase and a domain name. Similar to all
+          password managers you enter a primary password to reveal the password for a specific domain. However, there is
+          <b>no need to store any passwords</b>. You just need to remember <b>one primary password</b> and the generator
+          will generate a <b>unique password</b> for each domain. If you switch devices or browsers, you will always
+          have access to your passwords without the need to synchronize them.
+        </p>
+      </div>
+
+      <div class="w3-container dark-grey">
+        <h4>How does it work?</h4>
+        <p>
+          The generator calculates a 256 bit hash from the passphrase, the domain name and an incrementing salt using
+          the
+          <b>SHA256</b> algorithm. To meet the password requirements of most websites (letters, digits, special
+          characters), the hash is base 90 encoded using the following alphabet:
+          <br />
+          <br />
+          <span class="w3-monospace code"
+            >0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%"&/\()_+-=[]{};:'|,.&lt;&gt;?</span
+          >
+          <br />
+          <br />
+          If the password requirements are not met, the salt is incremented and the hash is recalculated until you get a
+          valid password.
+        </p>
+      </div>
+
+      <div class="w3-container w3-highway-blue">
+        <h4>But my password manager is more convenient!</h4>
+        <p>
+          No worries, you don't need to visit this site every time you need to access your passwords. The source code of
+          the password generator above is designed to work with the the
+          <a href="https://www.tampermonkey.net/" target="_blank">Tampermonkey</a>
+          browser extension (available for all major browsers). It will prompt you for your primary password and
+          automatically fill in the generated password.
+        </p>
+      </div>
+
+      <div class="w3-container dark-grey">
+        <h4>How to install the Tampermonkey script?</h4>
+        <ul>
+          <li>Install the Tampermonkey browser extension.</li>
+          <li>Click on the Tampermonkey icon in your browser.</li>
+          <li>Click on "Create a new script..."</li>
+          <li>
+            Copy paste <a href="https://martinbroede.github.io/passwords/main.js" target="_blank">this script</a> into
+            the editor.
+          </li>
+        </ul>
+      </div>
+
+      <div class="w3-container w3-highway-blue">
+        <h4>How to use the Tampermonkey script?</h4>
+        <p>Make sure the Tampermonkey script is enabled. Visit a login page of a website.</p>
+        <p>
+          <kbd>CTRL + ALT + G</kbd> will generate a password from your <b>primary password</b> and fill it in the
+          password field.
+        </p>
+        <p>
+          <kbd>CTRL + ALT + [0-9]</kbd> will fill in a username. The first time you use it, you will be prompted to
+          enter a username.
+        </p>
+        <p><kbd>CTRL + ALT + MINUS</kbd> will delete all usernames as well as the hash of your primary password.</p>
+      </div>
+
+      <div class="w3-container dark-grey">
+        <h4>Why is the hash of my primary password stored?</h4>
+        <p>
+          The hash is stored so the script can verify that you entered the correct primary password
+          <b>without knowing the password</b>. This is a common practice - SHA256 is a one-way function and the hash
+          cannot be reversed to reveal the password.
+        </p>
+      </div>
+
+      <div class="w3-container w3-highway-red">
+        <h4>Warning</h4>
+        <p>
+          As with all password managers, the security of your passwords depends on the security of your primary
+          password. If your primary password is weak, all your passwords are weak. Make sure to use a strong password
+          and never share it with anyone.
+        </p>
+      </div>
+
+      <div class="w3-container w3-highway-orange">
+        <h4>Disclaimer</h4>
+        <p>
+          As stated in the
+          <a href="https://raw.githubusercontent.com/martinbroede/passwords/main/LICENSE.txt">LICENSE</a>, the author of
+          this software is not responsible for any damages or losses resulting from the use of this software. Use at
+          your own risk.
+        </p>
+      </div>
     </div>
+    <!-- </Explanation> -->
+
+    <footer class="w3-container w3-dark-grey w3-padding">
+      <span class="w3-margin-right">
+        Password&nbsp;Manager&nbsp;by
+        <a href="https://github.com/martinbroede">Martin&nbsp;Broede</a>
+      </span>
+      <span class="w3-margin-right">
+        <a href="https://raw.githubusercontent.com/martinbroede/passwords/main/LICENSE.txt">LICENSE&nbsp;(MIT)</a>
+      </span>
+      <span class="w3-margin-right">
+        <a href="https://github.com/martinbroede/passwords" target="_blank">SOURCE&nbsp;CODE</a>
+      </span>
+    </footer>
   </body>
 </html>

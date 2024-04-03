@@ -313,7 +313,7 @@ function createPasswordPrompt() {
 
     const generatedPassword = await generateHash(domainname + password);
 
-    console.debug(`Generated hash from primary password with salt '${domainname}'`);
+    console.debug(`Generated hash from primary password with domain name '${domainname}'`);
     console.assert(password !== "", "password is empty");
     console.assert(domainname !== "", "domainname is empty");
 
@@ -467,7 +467,7 @@ let hasIntervalBeenSet = false;
  * @returns {void}
  */
 function onChange() {
-  const saltInput = /** @type {HTMLInputElement} */ (document.getElementById("salt"));
+  const domainInput = /** @type {HTMLInputElement} */ (document.getElementById("domain"));
   const urlInput = /** @type {HTMLInputElement} */ (document.getElementById("url"));
   const passwordInput = /** @type {HTMLInputElement} */ (document.getElementById("password"));
   const extractInput = /** @type {HTMLInputElement} */ (document.getElementById("extract"));
@@ -492,14 +492,14 @@ function onChange() {
     countdownSpan.innerText = String(TIMEOUT);
   }
 
-  saltInput.value = extractInput.checked ? extractDomain(urlInput.value) : urlInput.value;
+  domainInput.value = extractInput.checked ? extractDomain(urlInput.value) : urlInput.value;
 
-  if (saltInput.value + passwordInput.value === "" || Number(lengthInput.value) < MIN_HASH_LENGTH) {
+  if (domainInput.value + passwordInput.value === "" || Number(lengthInput.value) < MIN_HASH_LENGTH) {
     hashOutput.value = "";
     return;
   }
 
-  generateHash(saltInput.value + passwordInput.value, Math.max(Number(lengthInput.value), MIN_HASH_LENGTH)).then(
+  generateHash(domainInput.value + passwordInput.value, Math.max(Number(lengthInput.value), MIN_HASH_LENGTH)).then(
     (hash) => {
       hashOutput.value = showPassword.checked ? hash : obfuscatePassword(hash);
     }
@@ -522,7 +522,7 @@ function obfuscatePassword(text) {
  * @returns {void}
  */
 function copyToClipboard() {
-  const saltInput = /** @type {HTMLInputElement} */ (document.getElementById("salt"));
+  const domainInput = /** @type {HTMLInputElement} */ (document.getElementById("domain"));
   const passwordInput = /** @type {HTMLInputElement} */ (document.getElementById("password"));
   const lengthInput = /**@type {HTMLInputElement} */ (document.getElementById("length"));
   const hashOutput = /** @type {HTMLInputElement} */ (document.getElementById("hash"));
@@ -532,7 +532,7 @@ function copyToClipboard() {
     return;
   }
 
-  generateHash(saltInput.value + passwordInput.value, Number(lengthInput.value)).then((hash) => {
+  generateHash(domainInput.value + passwordInput.value, Number(lengthInput.value)).then((hash) => {
     navigator.clipboard
       .writeText(hash)
       .then(() => {
