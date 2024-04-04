@@ -5,7 +5,7 @@
 This is an unconventional password manager that instead of storing passwords in a database,
 generates them on the fly based on a primary password and a domain name.
 This way, you don't have to trust a third party with your passwords and you can easily generate the same password on different devices.
-The generated passwords are basically SHA-256 hashes of the master password and the domain name with some modifications to
+The generated passwords are basically SHA256 hashes of the primary password and the domain name with some modifications to
 meet the password requirements of most websites.
 
 ## Usage
