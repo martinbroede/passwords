@@ -148,19 +148,30 @@ function createToast(message, colorCode = "#eef") {
  * @param {KeyboardEvent} event - The keyboard event object.
  * @returns {number|undefined} - The corresponding number for the Mac option alternative key, or undefined if no match is found.
  */
-function getMacAltNumber(event){
+function getMacAltNumber(event) {
   switch (event.key) {
-    case "¡": return 1
-    case "“": return 2
-    case "¶": return 3
-    case "¢": return 4
-    case "[": return 5
-    case "]": return 6
-    case "|": return 7
-    case "{": return 8
-    case "}": return 9
-    case "≠": return 0
-    default: return undefined
+    case "¡":
+      return 1;
+    case "“":
+      return 2;
+    case "¶":
+      return 3;
+    case "¢":
+      return 4;
+    case "[":
+      return 5;
+    case "]":
+      return 6;
+    case "|":
+      return 7;
+    case "{":
+      return 8;
+    case "}":
+      return 9;
+    case "≠":
+      return 0;
+    default:
+      return undefined;
   }
 }
 
@@ -171,16 +182,16 @@ function getMacAltNumber(event){
  * @param {boolean} isMac - Indicates if the platform is Mac.
  * @returns {number|undefined} The event number.
  */
-function getEventNumber(event, isMac){
-  if (isMac & event.altKey) {
-    return getMacAltNumber(event)
+function getEventNumber(event, isMac) {
+  if (isMac && event.altKey) {
+    return getMacAltNumber(event);
   }
 
   if (Number(event.key) >= 0 && Number(event.key) <= 9) {
-    return Number(event.key)
+    return Number(event.key);
   }
 
-  return undefined
+  return undefined;
 }
 
 /**
@@ -189,10 +200,10 @@ function getEventNumber(event, isMac){
  */
 function installShortcuts() {
   document.addEventListener("keydown", function (event) {
-    const isMac = navigator.userAgent.indexOf("Mac") != -1
+    const isMac = navigator.userAgent.indexOf("Mac") != -1;
     const controlKey = isMac ? event.metaKey : event.ctrlKey;
-    const altKey = event.altKey
-    const generateKey = isMac ? event.key === "©" : event.key === "g"
+    const altKey = event.altKey;
+    const generateKey = isMac ? event.key === "©" : event.key === "g";
 
     if (altKey && controlKey && generateKey) {
       createPasswordPrompt();
