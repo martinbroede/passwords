@@ -143,16 +143,62 @@ function createToast(message, colorCode = "#eef") {
 }
 
 /**
+ * Translates the corresponding number for the given Mac alternative key.
+ *
+ * @param {KeyboardEvent} event - The keyboard event object.
+ * @returns {number|undefined} - The corresponding number for the Mac option alternative key, or undefined if no match is found.
+ */
+function getMacAltNumber(event){
+  switch (event.key) {
+    case "¡": return 1
+    case "“": return 2
+    case "¶": return 3
+    case "¢": return 4
+    case "[": return 5
+    case "]": return 6
+    case "|": return 7
+    case "{": return 8
+    case "}": return 9
+    case "≠": return 0
+    default: return undefined
+  }
+}
+
+/**
+ * Returns the event number based on the event and platform.
+ *
+ * @param {KeyboardEvent} event - The keyboard event.
+ * @param {boolean} isMac - Indicates if the platform is Mac.
+ * @returns {number|undefined} The event number.
+ */
+function getEventNumber(event, isMac){
+  if (isMac & event.altKey) {
+    return getMacAltNumber(event)
+  }
+
+  if (Number(event.key) >= 0 && Number(event.key) <= 9) {
+    return Number(event.key)
+  }
+
+  return undefined
+}
+
+/**
  * Sets up the shortcut to trigger the password prompt.
  * @returns {void}
  */
 function installShortcuts() {
   document.addEventListener("keydown", function (event) {
-    if (event.altKey && event.ctrlKey && event.key === "g") {
+    const isMac = navigator.userAgent.indexOf("Mac") != -1
+    const controlKey = isMac ? event.metaKey : event.ctrlKey;
+    const altKey = event.altKey
+    const generateKey = isMac ? event.key === "©" : event.key === "g"
+
+    if (altKey && controlKey && generateKey) {
       createPasswordPrompt();
-    } else if (event.altKey && event.ctrlKey && Number(event.key) >= 0 && Number(event.key) <= 9 && event.key !== " ") {
-      addUserName("user_" + event.key);
-    } else if (event.altKey && event.ctrlKey && event.key === "-") {
+    } else if (altKey && controlKey && getEventNumber(event, isMac) && event.key !== " ") {
+      addUserName("user_" + getEventNumber(event, isMac));
+    } else if (altKey && controlKey && event.key === "–") {
       deleteAllValues();
     }
   });
