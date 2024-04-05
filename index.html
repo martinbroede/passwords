@@ -18,7 +18,7 @@
       max-width: 400px;
     }
 
-    p {
+    #explanation > p {
       text-align: justify;
     }
 
@@ -112,7 +112,7 @@
           <input type="text" id="hash" name="hash" readonly class="w3-text-grey" autocomplete="off" />
 
           <span style="display: inline-block">
-            <button id="copy" class="w3-margin-top" type="button">COPY</button>
+            <button class="w3-margin-top" type="button" onclick="copyToClipboard()">COPY</button>
             <button class="w3-margin-top" type="button" onclick="clearAll()">CLEAR</button>
           </span>
         </p>
@@ -124,7 +124,7 @@
       <!-- </Password Generation Form -->
 
       <!-- < Explanation /> -->
-      <div class="w3-container w3-highway-blue">
+      <div id="explanation" class="w3-container w3-highway-blue">
         <h4>What is this?</h4>
         <p>
           This is a demo app for generating secure passwords based on a passphrase and a domain name. Similar to all
@@ -172,7 +172,7 @@
           <li>Click on the Tampermonkey icon in your browser.</li>
           <li>Click on "Create a new script..."</li>
           <li>
-            Copy paste <a href="https://martinbroede.github.io/passwords/main.js" target="_blank">this script</a> into
+            Copypaste <a href="https://martinbroede.github.io/passwords/main.js" target="_blank">this script</a> into
             the editor.
           </li>
         </ul>
@@ -210,7 +210,7 @@
         </p>
       </div>
 
-      <div class="w3-container w3-highway-orange">
+      <div class="w3-container dark-grey">
         <h4>Disclaimer</h4>
         <p>
           As stated in the

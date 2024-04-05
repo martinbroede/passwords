@@ -522,9 +522,6 @@ let hashClearText = "";
 
 if (["github.io", "0.123"].includes(extractDomain(window.location.hostname))) {
   // is demo page on github.io or localhost
-  copyButton.addEventListener("click", copyToClipboard);
-  // the event listener is added because the navigator.clipboard API will
-  // block in many browsers if it is not triggered within a user event
   setInterval(cleanUp, 1000);
 }
 
