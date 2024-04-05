@@ -8,7 +8,6 @@
     <link rel="icon" href="https://martinbroede.github.io/passwords/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
     <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-highway.css" />
-    <script src="main.js"></script>
   </head>
 
   <style>
@@ -113,7 +112,7 @@
           <input type="text" id="hash" name="hash" readonly class="w3-text-grey" autocomplete="off" />
 
           <span style="display: inline-block">
-            <button class="w3-margin-top" type="button" onclick="copyToClipboard()">COPY</button>
+            <button id="copy" class="w3-margin-top" type="button">COPY</button>
             <button class="w3-margin-top" type="button" onclick="clearAll()">CLEAR</button>
           </span>
         </p>
@@ -223,6 +222,7 @@
     </div>
     <!-- </Explanation> -->
 
+    <!-- <Footer /> -->
     <footer class="w3-container w3-dark-grey w3-padding">
       <span class="w3-margin-right">
         Password&nbsp;Manager&nbsp;by
@@ -235,5 +235,7 @@
         <a href="https://github.com/martinbroede/passwords" target="_blank">SOURCE&nbsp;CODE</a>
       </span>
     </footer>
+    <!-- </Footer> -->
   </body>
+  <script src="main.js"></script>
 </html>

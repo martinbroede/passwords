@@ -498,16 +498,35 @@ function extractDomain(url) {
 }
 
 test();
-if (!["github.io", "0.1"].includes(extractDomain(window.location.hostname))) {
+if (!["github.io", "0.123"].includes(extractDomain(window.location.hostname))) {
+  // is NOT the demo page on github.io or localhost
   installShortcuts();
 }
 
 // *********************************************************************************************************************
-// THE CODE BELOW IS ONLY USED IN THE DEMO APPLICATION AND NOT IN THE USER SCRIPT
+// THE CODE BELOW IS ONLY USED IN THE DEMO APPLICATION AND NOT IN THE TAMPERMONKEY USER SCRIPT
 // IT DOES NOT AFFECT THE FUNCTIONALITY OF THE USER SCRIPT THOUGH
 // *********************************************************************************************************************
 
-let hasIntervalBeenSet = false;
+const copyButton = /** @type {HTMLButtonElement} */ (document.getElementById("copy"));
+const countdownSpan = /** @type {HTMLSpanElement} */ (document.getElementById("countdown"));
+const domainInput = /** @type {HTMLInputElement} */ (document.getElementById("domain"));
+const extractInput = /** @type {HTMLInputElement} */ (document.getElementById("extract"));
+const hashOutput = /** @type {HTMLInputElement} */ (document.getElementById("hash"));
+const lengthInput = /**@type {HTMLInputElement} */ (document.getElementById("length"));
+const passwordInput = /** @type {HTMLInputElement} */ (document.getElementById("password"));
+const showPassword = /**@type {HTMLInputElement} */ (document.getElementById("show"));
+const urlInput = /** @type {HTMLInputElement} */ (document.getElementById("url"));
+
+let hashClearText = "";
+
+if (["github.io", "0.123"].includes(extractDomain(window.location.hostname))) {
+  // is demo page on github.io or localhost
+  copyButton.addEventListener("click", copyToClipboard);
+  // the event listener is added because the navigator.clipboard API will
+  // block in many browsers if it is not triggered within a user event
+  setInterval(cleanUp, 1000);
+}
 
 /**
  * Generates a password hash from the input fields and displays it in the hashOutput field.
@@ -515,41 +534,25 @@ let hasIntervalBeenSet = false;
  * @returns {void}
  */
 function onChange() {
-  const domainInput = /** @type {HTMLInputElement} */ (document.getElementById("domain"));
-  const urlInput = /** @type {HTMLInputElement} */ (document.getElementById("url"));
-  const passwordInput = /** @type {HTMLInputElement} */ (document.getElementById("password"));
-  const extractInput = /** @type {HTMLInputElement} */ (document.getElementById("extract"));
-  const lengthInput = /**@type {HTMLInputElement} */ (document.getElementById("length"));
-  const hashOutput = /** @type {HTMLInputElement} */ (document.getElementById("hash"));
-  const countdownSpan = /**@type {HTMLSpanElement} */ (document.getElementById("countdown"));
-  const showPassword = /**@type {HTMLInputElement} */ (document.getElementById("show"));
-
   const length = Number(lengthInput.value);
   if (!isNaN(length) && (length < MIN_HASH_LENGTH || length > MAX_HASH_LENGTH)) {
     lengthInput.classList.add("w3-pale-red");
   } else {
     lengthInput.classList.remove("w3-pale-red");
   }
-
-  if (!hasIntervalBeenSet) {
-    setInterval(cleanUp, 1000);
-    hasIntervalBeenSet = true;
-  }
-
   if ((countdownSpan.innerText = "*")) {
     countdownSpan.innerText = String(TIMEOUT);
   }
-
   domainInput.value = extractInput.checked ? extractDomain(urlInput.value) : urlInput.value;
-
   if (domainInput.value + passwordInput.value === "" || Number(lengthInput.value) < MIN_HASH_LENGTH) {
     hashOutput.value = "";
+    hashClearText = "";
     return;
   }
-
   generateHash(domainInput.value + passwordInput.value, Math.max(Number(lengthInput.value), MIN_HASH_LENGTH)).then(
     (hash) => {
       hashOutput.value = showPassword.checked ? hash : obfuscatePassword(hash);
+      hashClearText = hash;
     }
   );
 }
@@ -570,26 +573,20 @@ function obfuscatePassword(text) {
  * @returns {void}
  */
 function copyToClipboard() {
-  const domainInput = /** @type {HTMLInputElement} */ (document.getElementById("domain"));
-  const passwordInput = /** @type {HTMLInputElement} */ (document.getElementById("password"));
-  const lengthInput = /**@type {HTMLInputElement} */ (document.getElementById("length"));
-  const hashOutput = /** @type {HTMLInputElement} */ (document.getElementById("hash"));
-
-  if (!hashOutput.value) {
+  if (!hashClearText) {
     createToast("Nothing to copy", COLOR_CODE_RED);
     return;
   }
-
-  generateHash(domainInput.value + passwordInput.value, Number(lengthInput.value)).then((hash) => {
-    navigator.clipboard
-      .writeText(hash)
-      .then(() => {
-        createToast("Copied to clipboard", COLOR_CODE_BLUE);
-      })
-      .catch(() => {
-        createToast("Copying not possible", COLOR_CODE_RED);
-      });
-  });
+  navigator.clipboard
+    .writeText(hashClearText)
+    .then(() => {
+      createToast("Copied to<br />clipboard", COLOR_CODE_BLUE);
+      onChange();
+    })
+    .catch(() => {
+      createToast("Copying<br />not allowed", COLOR_CODE_RED);
+      onChange();
+    });
 }
 
 /**
@@ -597,12 +594,9 @@ function copyToClipboard() {
  * @returns {void}
  */
 function clearAll() {
-  const passwordInput = /** @type {HTMLInputElement} */ (document.getElementById("password"));
-  const hashOutput = /** @type {HTMLInputElement} */ (document.getElementById("hash"));
-
   hashOutput.value = "";
+  hashClearText = "";
   passwordInput.value = "";
-
   navigator.clipboard
     .writeText("")
     .then(() => {
@@ -619,11 +613,7 @@ function clearAll() {
  * @returns {void}
  */
 function cleanUp() {
-  const passwordInput = /** @type {HTMLInputElement} */ (document.getElementById("password"));
-  const hashOutput = /** @type {HTMLInputElement} */ (document.getElementById("hash"));
-  const countdownSpan = /** @type {HTMLSpanElement} */ (document.getElementById("countdown"));
   const countdown = Number(countdownSpan.innerText);
-
   if (isNaN(countdown)) {
     return;
   }
