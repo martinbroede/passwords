@@ -1,0 +1,18 @@
+{
+  "lang": "en-us",
+  "name": "Password Generator",
+  "description": "A password manager based on SHA-256 with no need for storage",
+  "start_url": "/passwords/",
+  "background_color": "#233543",
+  "theme_color": "#233543",
+  "orientation": "any",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
