@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Password Generator
 // @namespace    http://tampermonkey.net/
-// @version      2024-03-31
+// @version      2024-12-22
 // @description  Generate secure passwords
 // @author       Martin Broede
 // @match        https://*/*
@@ -209,7 +209,7 @@ function installShortcuts() {
       createPasswordPrompt();
     } else if (altKey && controlKey && getEventNumber(event, isMac) && event.key !== " ") {
       addUserName("user_" + getEventNumber(event, isMac));
-    } else if (altKey && controlKey && event.key === "–") {
+    } else if (altKey && controlKey && (event.key === "-" || event.key === "–")) {
       deleteAllValues();
     }
   });
