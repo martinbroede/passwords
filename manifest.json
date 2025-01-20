@@ -1,6 +1,6 @@
 {
   "lang": "en-us",
-  "name": "Password Generator",
+  "name": "Passwords",
   "description": "A password manager based on SHA-256 with no need for storage",
   "start_url": "/passwords/",
   "background_color": "#233543",
