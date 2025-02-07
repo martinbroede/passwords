@@ -1,6 +1,13 @@
-const CACHE_NAME = "password-generator-v0.1.1";
+const CACHE_NAME = "password-generator-v0.1.2";
 
-console.debug("started service worker");
+caches.keys().then((cacheNames) => {
+  cacheNames.forEach((cacheName) => {
+    if (cacheName !== CACHE_NAME) {
+      caches.delete(cacheName);
+      console.debug(`service worker deleted cache: ${cacheName}`);
+    }
+  });
+});
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
