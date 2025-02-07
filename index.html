@@ -46,7 +46,7 @@
         <h3>Passwords</h3>
       </div>
 
-      <!-- <Password Generation Form -->
+      <!-- <Password Generation Form> -->
       <div class="w3-container w3-monospace w3-padding w3-light-grey">
         <p>
           <label for="extract">EXTRACT DOMAIN NAME FROM URL:</label>
@@ -122,9 +122,9 @@
           <input type="checkbox" id="show" name="show" onchange="onChange()" oninput="onChange()" />
         </p>
       </div>
-      <!-- </Password Generation Form -->
+      <!-- </Password Generation Form> -->
 
-      <!-- < Explanation /> -->
+      <!-- <Explanation> -->
       <div id="explanation" class="w3-container w3-highway-blue">
         <h4>What is this?</h4>
         <p>
@@ -177,6 +177,11 @@
             the editor.
           </li>
         </ul>
+        <p>
+          <b>Note:</b>
+          In general, you should not copy and execute scripts that you do not understand, especially if they involve
+          security-related functionality. If you don’t understand what this script does, you should better not use it.
+        </p>
       </div>
 
       <div class="w3-container w3-highway-blue">
@@ -199,15 +204,20 @@
           The hash is stored so the script can verify that you entered the correct primary password
           <b>without knowing the password</b>. This is a common practice - SHA256 is a one-way function and the hash
           cannot be reversed to reveal the password.
+          <br />
+          However, weak passwords can still be cracked through brute-force attacks. To mitigate this, the hashing
+          process in this script runs for thousands of iterations, making such attacks significantly more difficult.
         </p>
       </div>
 
       <div class="w3-container w3-highway-red">
         <h4>Warning</h4>
         <p>
-          As with all password managers, the security of your passwords depends on the security of your primary
-          password. If your primary password is weak, all your passwords are weak. Make sure to use a strong password
-          and never share it with anyone.
+          As with all password managers, the security of your stored passwords depends on the strength of your primary
+          password. If your primary password is weak, all your passwords are at risk. Make sure to use a strong password
+          and never share it with anyone. A strong password must be unpredictable, meaning it should not be based on
+          dictionary words, names, or common phrases. It should contain a mix of letters, digits, and special characters
+          and be at least 16 characters long.
         </p>
       </div>
 
@@ -223,7 +233,7 @@
     </div>
     <!-- </Explanation> -->
 
-    <!-- <Footer /> -->
+    <!-- <Footer> -->
     <footer class="w3-container w3-dark-grey w3-padding">
       <span class="w3-margin-right">
         Password&nbsp;Manager&nbsp;by

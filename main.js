@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Passwords
 // @namespace    http://tampermonkey.net/
-// @version      2024-12-22
+// @version      2025-02-07
 // @description  Generate and manage secure passwords
 // @author       Martin Broede
 // @match        https://*/*
@@ -24,7 +24,9 @@
  * If you want to delete the stored usernames, use [CTRL + ALT + MINUS]
  *
  * KEEP IN MIND THAT, AS IN EVERY PASSWORD MANAGER, THE PRIMARY PASSWORD IS THE KEY TO ALL OTHER PASSWORDS!
- * THEREFORE, IT IS IMPORTANT TO KEEP THE PRIMARY PASSWORD SECURE AND TO NOT SHARE IT WITH ANYONE!
+ * FOR SAFE USAGE OF THIS SCRIPT, YOUR PRIMARY PASSWORD MUST BE LONG (16+ CHARACTERS) AND **UNPREDICTABLE**
+ * MEANING: IT SHOULD NOT CONTAIN ANY WORDS OR PHRASES THAT CAN BE GUESSED OR FOUND IN A DICTIONARY.
+ * IT IS IMPORTANT TO KEEP THE PRIMARY PASSWORD SECURE AND TO NOT SHARE IT WITH ANYONE!
  */
 
 "use strict";
@@ -32,6 +34,7 @@
 const MIN_HASH_LENGTH = 4;
 const MAX_HASH_LENGTH = 40;
 const DEFAULT_HASH_LENGTH = 16;
+const SHA256_ITERATIONS = 5000;
 
 const TIMEOUT = 300;
 
@@ -316,16 +319,22 @@ async function generateHash(input, outputLength = DEFAULT_HASH_LENGTH, salt = 0)
 
 /**
  * Stores the hash of the password in the storage
+ * (SHA-256 hash with the number of iterations defined by SHA256_ITERATIONS)
+ * Checks if the hash is already stored and creates a message toast
+ * if the hash deviates from the stored hash.
  * @param {string} password
  * @returns {Promise<void>}
  */
-async function storePasswordHash(password) {
-  const hash = await getSHA256asBase36String(password);
+async function hashPrimaryPassword(password) {
+  let hash = password;
+  for (let i = 0; i < SHA256_ITERATIONS; i++) {
+    hash = await getSHA256asBase36String(hash);
+  }
   if (!getValue("pwHash")) {
     setValue("pwHash", hash);
-    console.info("Stored password hash", hash);
+    console.debug("Stored password hash", hash);
   } else if (getValue("pwHash") !== hash) {
-    createToast("This is not your primary password", COLOR_CODE_RED);
+    createToast("Incorrect Password", COLOR_CODE_RED);
   }
 }
 
@@ -356,11 +365,10 @@ function createPasswordPrompt() {
       domainname = extractDomain(hostname);
     }
 
-    await storePasswordHash(password);
+    await hashPrimaryPassword(password);
 
     const generatedPassword = await generateHash(domainname + password);
 
-    console.debug(`Generated hash from primary password with domain name '${domainname}'`);
     console.assert(password !== "", "password is empty");
     console.assert(domainname !== "", "domainname is empty");
 

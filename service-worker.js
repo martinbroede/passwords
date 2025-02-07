@@ -1,4 +1,4 @@
-const CACHE_NAME = "password-generator-v0.1.0";
+const CACHE_NAME = "password-generator-v0.1.1";
 
 console.debug("started service worker");
 
