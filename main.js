@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Passwords
 // @namespace    http://tampermonkey.net/
-// @version      2025-02-07
+// @version      2025-07-22
 // @description  Generate and manage secure passwords
 // @author       Martin Broede
 // @match        https://*/*
@@ -209,6 +209,8 @@ function installShortcuts() {
     const generateKey = isMac ? event.key === "©" : event.key === "g";
 
     if (altKey && controlKey && generateKey) {
+      const userName = getUserName();
+      insertUserName(userName);
       createPasswordPrompt();
     } else if (altKey && controlKey && getEventNumber(event, isMac) && event.key !== " ") {
       addUserName("user_" + getEventNumber(event, isMac));
@@ -219,18 +221,44 @@ function installShortcuts() {
 }
 
 /**
+ * Retrieves the username for the current page.
+ * If the username is not stored, it prompts the user to enter it.
+ * If the username is already stored, it returns the stored value.
+ * @returns {string} The username for the current page.
+ * If no username is provided, it returns an empty string.
+ */
+function getUserName() {
+  const key = window.location.hostname + window.location.pathname;
+  let userName = getValue(key) || "";
+  if (userName) {
+    console.log(`Found username for ${key}: ${userName}`);
+  } else {
+    userName = prompt(`Enter username for ${key}`) || "";
+    if (userName) {
+      setValue(key, userName);
+      createToast(`Saved username for ${key}: ${userName}`, COLOR_CODE_BLUE);
+    } else {
+      createToast(`No username provided for ${key}`, COLOR_CODE_RED);
+    }
+  }
+  return userName;
+}
+
+/**
  * Simulates a key press event on the input field
  * to trigger input validation.
  * @param {HTMLInputElement} field
+ * @param {boolean} [focus=true] - Whether to focus the field before triggering validation.
  * @returns {void}
  */
-function triggerInputValidation(field) {
-  field.focus();
-  const events = ["change", "input", "keydown", "keypress", "keyup"];
+function triggerInputValidation(field, focus = true) {
+  if (focus) {
+    field.focus();
+  }
+  const events = ["change", "input", "keydown", "keypress", "keyup", "focus", "mousdown", "mouseup", "blur"];
   for (let i = 0; i < events.length; i++) {
     const event = new Event(events[i], {
       bubbles: true,
-      cancelable: false,
     });
     field.dispatchEvent(event);
   }
@@ -242,13 +270,35 @@ function triggerInputValidation(field) {
  * @param {string} password
  */
 function insertPassword(password) {
-  const passwordInputFields = document.querySelectorAll("input");
-  passwordInputFields.forEach((field) => {
+  const inputFields = document.querySelectorAll("input");
+  inputFields.forEach((field) => {
     if (field.type === "password" && !field.name.includes("old") && !field.name.includes("current")) {
-      field.value = password;
+      field.setRangeText(password, 0, password.length, "end");
       setTimeout(() => {
         triggerInputValidation(field);
       }, 10);
+    }
+  });
+}
+
+/**
+ * Inserts the userName into all username / email input fields
+ * @param {string} userName
+ */
+function insertUserName(userName) {
+  const inputFields = document.querySelectorAll("input");
+  const types = ["text", "email", "username", "name", "user", "login"];
+  inputFields.forEach((field) => {
+    if ((
+      types.includes(field.type) ||
+      field.autocomplete === "username" ||
+      field.id.toLowerCase().includes("username") ||
+      types.some((type) => field.name.toLowerCase().includes(type)) ||
+      types.some((type) => field.id.toLowerCase().includes(type)) ) &&
+      field.type != "submit"
+    ) {
+      field.setRangeText(userName, 0, userName.length, "end");
+      triggerInputValidation(field, false);
     }
   });
 }
@@ -344,7 +394,11 @@ async function hashPrimaryPassword(password) {
  * @returns {void}
  */
 function createPasswordPrompt() {
-  if (document.getElementById("id-tampermonkey-password-prompt")) {
+  const passwordInput = document.getElementById("id-password-prompt");
+  if (passwordInput) {
+    setTimeout(() => {
+      passwordInput.focus();
+    }, 100);
     return;
   }
 
@@ -378,7 +432,7 @@ function createPasswordPrompt() {
   }
 
   const div = document.createElement("div");
-  div.id = "id-tampermonkey-password-prompt";
+  div.id = "id-prompt-container";
   div.style.position = "fixed";
   div.style.top = "0";
   div.style.left = "0";
@@ -397,8 +451,10 @@ function createPasswordPrompt() {
   label.style.display = "block";
   label.innerText = "Password";
   label.style.fontSize = "2rem";
+  label.className = "required";
 
   const input = document.createElement("input");
+  input.id = "id-password-prompt";
   input.type = "password";
   input.style.fontSize = "2rem";
   input.style.backgroundColor = "#FFFE";
@@ -407,6 +463,7 @@ function createPasswordPrompt() {
   input.style.maxWidth = "400px";
   input.style.color = "#111";
   input.autocomplete = "off";
+  input.required = true;
 
   const lineBreak = document.createElement("br");
 
