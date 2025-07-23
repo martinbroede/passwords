@@ -286,21 +286,25 @@ function insertPassword(password) {
  * @param {string} userName
  */
 function insertUserName(userName) {
-  const inputFields = document.querySelectorAll("input");
-  const types = ["text", "email", "username", "name", "user", "login"];
-  inputFields.forEach((field) => {
-    if ((
-      types.includes(field.type) ||
-      field.autocomplete === "username" ||
-      field.id.toLowerCase().includes("username") ||
-      types.some((type) => field.name.toLowerCase().includes(type)) ||
-      types.some((type) => field.id.toLowerCase().includes(type)) ) &&
-      field.type != "submit"
-    ) {
-      field.setRangeText(userName, 0, userName.length, "end");
-      triggerInputValidation(field, false);
-    }
-  });
+  try {
+    const inputFields = document.querySelectorAll("input");
+    const types = ["text", "email", "username", "name", "user", "login"];
+    inputFields.forEach((field) => {
+      if (
+        (types.includes(field.type) ||
+          field.autocomplete === "username" ||
+          field.id.toLowerCase().includes("username") ||
+          types.some((type) => field.name.toLowerCase().includes(type)) ||
+          types.some((type) => field.id.toLowerCase().includes(type))) &&
+        field.type != "submit"
+      ) {
+        field.setRangeText(userName, 0, userName.length, "end");
+        triggerInputValidation(field, false);
+      }
+    });
+  } catch (e) {
+    console.error(String(e));
+  }
 }
 
 /**
