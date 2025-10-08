@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Passwords
 // @namespace    http://tampermonkey.net/
-// @version      2025-07-22
+// @version      2025-10-08
 // @description  Generate and manage secure passwords
 // @author       Martin Broede
 // @match        https://*/*
@@ -539,11 +539,16 @@ function addUserName(userNameKey) {
  * @returns {void}
  */
 function deleteAllValues() {
+  const key = window.location.hostname + window.location.pathname;
   for (let i = 0; i < 10; i++) {
     setValue("user_" + i, "");
   }
   setValue("pwHash", "");
-  createToast("Deleted stored usernames<br/>Reset primary password", COLOR_CODE_RED);
+  setValue(key, "");
+  createToast(
+    `Deleted stored usernames<br/>Reset primary password<br/>Deleted stored username for ${key}`,
+    COLOR_CODE_RED
+  );
 }
 
 /**
